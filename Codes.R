@@ -1,48 +1,4 @@
 
-#### China Map#### 
-library(ggplot2)
-library(sf)
-
-china_map <- st_read("/Users/mac/Desktop/西湖大学/1--张哲老师/3--论文2/2--Manuscript_PVC/NC_manus/Version1.0/data/中华人民共和国/中华人民共和国.shp")
-china_map$name
-
-provinces <- c("云南省", "海南省", "河南省", "湖北省")
-
-ggplot(data = china_map) +
-  geom_sf(aes(fill = name %in% provinces)) +
-  scale_fill_manual(values = c("TRUE" = "orange", "FALSE" = "grey")) +
-  labs(title = "Map of China Highlighting Yunnan, Hainan, Henan, and Hubei") +
-  theme_minimal()
-
-province_colors <- c("云南省" = "#80C1C4", "海南省" = "#B696B6", "河南省" = "#E6CECF", "湖北省" = "#9FBA95")
-
-p_map <- ggplot(data = china_map) +
-  geom_sf(color = "white", size = 0.2, aes(fill = ifelse(name %in% provinces, name, "Other"))) +
-  scale_fill_manual(
-    values = c(province_colors, "Other" = "#BDC3C7"),
-    labels = c("Yunnan", "Hainan", "Henan", "Hubei", "Other Provinces")
-  ) +
-  labs(
-    title = "Map of China Highlighting Yunnan, Hainan, Henan, and Hubei",
-    subtitle = "Each highlighted province is shown in a unique color",
-    caption = "Source: GADM"
-  ) +
-  theme_minimal() +
-  theme(
-    text = element_text(family = "Arial"),
-    plot.title = element_text(size = 16, face = "bold"),
-    plot.subtitle = element_text(size = 12),
-    plot.caption = element_text(size = 10, color = "grey50"),
-    legend.position = "none"#,  # Put the legend to the right
-    #panel.grid.major = element_blank(),
-    #panel.grid.minor = element_blank(),
-    #panel.background = element_rect(fill = "#F3F4F6", color = NA),
-    #plot.background = element_rect(fill = "#F3F4F6", color = NA)
-  )
-p_map
-
-
-
 ##### 16S pipeline ####
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
@@ -59,7 +15,7 @@ library(ggplotify)
 library(cowplot)
 library(vegan)
 library(MicrobiotaProcess)
-setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/11--草地贪夜饿幼虫论文/1.1--Qiime_4")
+setwd("T.molitor/1.1--Qiime_4")
 
 THMAC.ps <-qza_to_phyloseq(
   features="table-with-phyla-no-metochondria-no-chloroplast.qza",
@@ -219,7 +175,7 @@ p4 <- ps_sites %>%
     #.size = Shannon, 
     #.alpha = Shannon,
     ellipse = T,
-    show.legend = FALSE # don't display the legend of stat_ellipse 
+    show.legend = FALSE
   ) +
   scale_fill_manual(
     values = c("#9FBA95", "#E6CECF","#B696B6", "#80C1C4"), 
@@ -244,7 +200,7 @@ p5 <- ps_sites %>%
     #.size = Shannon, 
     #.alpha = Shannon,
     ellipse = F,
-    show.legend = FALSE # don't display the legend of stat_ellipse 
+    show.legend = FALSE 
   ) +
   scale_fill_manual(
     values = c("#9FBA95", "#E6CECF","#B696B6", "#80C1C4"), 
@@ -371,8 +327,8 @@ tree_all <- ggtree(
   geom_tiplab(
     data = td_filter(!is.na(Sign_Sites) & nodeClass == "Genus"),
     aes(node = node, label = label),
-    size = 5,    # 设置字体大小
-    offset = 0 # 设置偏移量
+    size = 5,
+    offset = 0
   )
 
 tree_all
@@ -398,13 +354,13 @@ tree_all
 
 
 ##### Input data of PVC####
-setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/11--草地贪夜饿幼虫论文/1--Qiime")
+setwd("S.frugi/1--Qiime")
 # Entry 4 (Silva 138.1) on 1/28/2021 in R v3.6.3
 S.ps <-qza_to_phyloseq(
-  features="贪夜蛾/1--Data/table-with-phyla-no-metochondria-no-chloroplast.qza",
-  tree="贪夜蛾/1--Data/rooted-tree.qza",
-  taxonomy="贪夜蛾/1--Data/taxonomy.qza",
-  metadata = "贪夜蛾/1--Data/metadata.tsv")
+  features="1--Data/table-with-phyla-no-metochondria-no-chloroplast.qza",
+  tree="1--Data/rooted-tree.qza",
+  taxonomy="1--Data/taxonomy.qza",
+  metadata = "1--Data/metadata.tsv")
 
 S.ps
 #phyloseq-class experiment-level object
@@ -417,10 +373,10 @@ S.ps.dominate <- filter_taxa(S.ps, function(x) sum(x>2) > 1,TRUE)
 
 
 T.ps <-qza_to_phyloseq(
-  features="黄粉虫/1--Data/otu_table.qza",
-  tree="黄粉虫/1--Data/rooted-tree.qza",
-  taxonomy="黄粉虫/1--Data/taxonomy.qza",
-  metadata = "黄粉虫/1--Data/group.txt")
+  features="T.molitor/1--Data/otu_table.qza",
+  tree="T.molitor/1--Data/rooted-tree.qza",
+  taxonomy="T.molitor/1--Data/taxonomy.qza",
+  metadata = "T.molitor/1--Data/group.txt")
 
 T.ps
 #phyloseq-class experiment-level object
@@ -750,8 +706,8 @@ aplot::plot_list(gglist=list(beta1, beta2,tree_S,tree_T), tag_levels="a")
 
 library(pipeR)
 library(pheatmap)
-#setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/8--幼虫喂食PVC微生物组分析-16s/9--Picrust_gene")
-#setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/3--黄粉虫PVC_16s数据/Picrust2/picrust2_result_pipeline2/EC_metagenome_out/Picrust_gene")
+#setwd("Picrust_gene")
+#setwd("Picrust2/picrust2_result_pipeline2/EC_metagenome_out/Picrust_gene")
 otu <- read.delim("Ec_description_PVC1.csv", header=T, row.names=1,sep = ",")
 otu$EF <- NULL
 otu$PEF <- NULL
@@ -777,7 +733,7 @@ plot1 + plot2
 
 #### Differential Pathway T. molitor
 library(DESeq2)
-setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/3--黄粉虫PVC_16s数据/Picrust2/picrust2_result_pipeline2/KO_metagenome_out/Deseq2")
+setwd("Picrust2/picrust2_result_pipeline2/KO_metagenome_out/Deseq2")
 mycounts <- read.csv("KO_IN.csv")
 head(mycounts)
 rownames(mycounts)<-mycounts[,1]
@@ -841,7 +797,7 @@ p2
 #### Differential Pathway S. frugiperda
 
 library(DESeq2)
-setwd("/Users/mac/Desktop/西湖大学/2--毕业论文/8--幼虫喂食PVC微生物组分析-16s/5-Picrust/picrust2_result_pipeline2/KO_metagenome_out")
+setwd("5-Picrust/picrust2_result_pipeline2/KO_metagenome_out")
 mycounts <- read.table('pred_metagenome_unstrat.tsv', header=T, sep='\t')
 head(mycounts)
 rownames(mycounts)<-mycounts[,1]
@@ -913,3 +869,48 @@ p1
 plot1 <- as.ggplot(p1)
 plot2 <- as.ggplot(p2)
 plot1 + plot2
+
+
+#### China Map#### 
+library(ggplot2)
+library(sf)
+
+china_map <- st_read("中华人民共和国.shp")
+china_map$name
+
+provinces <- c("云南省", "海南省", "河南省", "湖北省")
+
+ggplot(data = china_map) +
+  geom_sf(aes(fill = name %in% provinces)) +
+  scale_fill_manual(values = c("TRUE" = "orange", "FALSE" = "grey")) +
+  labs(title = "Map of China Highlighting Yunnan, Hainan, Henan, and Hubei") +
+  theme_minimal()
+
+province_colors <- c("云南省" = "#80C1C4", "海南省" = "#B696B6", "河南省" = "#E6CECF", "湖北省" = "#9FBA95")
+
+p_map <- ggplot(data = china_map) +
+  geom_sf(color = "white", size = 0.2, aes(fill = ifelse(name %in% provinces, name, "Other"))) +
+  scale_fill_manual(
+    values = c(province_colors, "Other" = "#BDC3C7"),
+    labels = c("Yunnan", "Hainan", "Henan", "Hubei", "Other Provinces")
+  ) +
+  labs(
+    title = "Map of China Highlighting Yunnan, Hainan, Henan, and Hubei",
+    subtitle = "Each highlighted province is shown in a unique color",
+    caption = "Source: GADM"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Arial"),
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    plot.caption = element_text(size = 10, color = "grey50"),
+    legend.position = "none"#,  # Put the legend to the right
+    #panel.grid.major = element_blank(),
+    #panel.grid.minor = element_blank(),
+    #panel.background = element_rect(fill = "#F3F4F6", color = NA),
+    #plot.background = element_rect(fill = "#F3F4F6", color = NA)
+  )
+p_map
+
+
