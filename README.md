@@ -4,7 +4,7 @@
 
 ### Purpose
 
-Explore the microbiota change after PVC digestion in S. frugiperda and T. molitor Larvar.
+Explore the PVC degradation biological resources in S. frugiperda and T. molitor larvar gut.
 
 
 
